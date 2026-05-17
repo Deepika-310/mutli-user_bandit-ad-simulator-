@@ -38,8 +38,7 @@ with st.expander("How the simulation works"):
 Over time → the system should learn the best ad  
 """)
 
-
-#  USER INPUT
+# USER INPUT
 
 
 algo_choice = st.selectbox(
@@ -54,7 +53,7 @@ non_stationary = st.checkbox("Enable changing environment")
 ads = [0.3, 0.5, 0.7]
 
 
-#  RUN SIMULATION
+# RUN SIMULATION
 
 
 if st.button("Run the Simulation"):
@@ -68,13 +67,13 @@ if st.button("Run the Simulation"):
     else:
         algo = UCB(3)
 
-    rewards, regret, counts = simulate(ads, algo, steps, non_stationary)
+    rewards, regret, counts, selections = simulate(ads, algo, steps, non_stationary)
 
     
     # RESULTS
     
 
-    st.subheader(" Results")
+    st.subheader("Results")
 
     st.write("Ad Selection Counts:", counts)
 
@@ -93,19 +92,28 @@ if st.button("Run the Simulation"):
     st.pyplot(fig2)
 
     
-    # FINAL METRICS
+    # AD SELECTION GRAPH (NEW)
     
 
-    st.subheader(" Final Metrics")
+    st.subheader("Ad Selection Over Time")
+
+    fig3, ax3 = plt.subplots()
+    ax3.plot(selections, alpha=0.6)
+    ax3.set_title("Which Ad is Selected Over Time")
+    ax3.set_xlabel("Steps")
+    ax3.set_ylabel("Ad Index (0,1,2)")
+    st.pyplot(fig3)
+
+   
+    # FINAL METRICS
+   
+
+    st.subheader("Final Metrics")
 
     st.write(f"Total reward after {steps} users: **{rewards[-1]}**")
     st.write(f"Final regret: **{int(regret[-1])}**")
 
-    
-    # INTELLIGENT INTERPRETATION
-    
-
-    st.subheader(" Trial Interpretation")
+    st.subheader("Trial Interpretation")
 
     reward_growth_rate = (rewards[-1] - rewards[0]) / len(rewards)
     regret_growth_rate = (regret[-1] - regret[0]) / len(regret)
@@ -113,32 +121,43 @@ if st.button("Run the Simulation"):
     last_100_reward = rewards[-1] - rewards[-100] if len(rewards) > 100 else rewards[-1]
     last_100_regret = regret[-1] - regret[-100] if len(regret) > 100 else regret[-1]
 
-    # Convergence insight
     if last_100_regret < 10:
-        st.write("The algorithm has mostly converged — very few mistakes recently.")
+        st.write("In the final phase, the algorithm is making very few mistakes — it has likely identified the best ad.")
     elif regret_growth_rate > 0.4:
-        st.write("The algorithm is still making frequent mistakes — weak convergence.")
+        st.write("Regret is still increasing quickly, meaning the algorithm hasn't settled on a good strategy yet.")
 
-    # Reward insight
     if last_100_reward > 50:
-        st.write(" Strong reward gain in the final phase — effective exploitation.")
+        st.write("The system is gaining strong rewards toward the end — it is confidently exploiting a good ad.")
     elif reward_growth_rate < 0.2:
-        st.write(" Slow reward growth — too much exploration or poor learning.")
+        st.write("Reward growth is slow, suggesting too much exploration or difficulty identifying the best ad.")
 
-    # Overall judgment
     if last_100_regret < 10 and last_100_reward > 50:
-        st.success(" Overall: Good balance between exploration and exploitation.")
+        st.success("Overall, the algorithm found a good balance and learned effectively.")
     else:
-        st.warning(" Overall: Needs tuning (epsilon / algorithm choice).")
+        st.warning("The algorithm may need tuning (try changing epsilon or algorithm type).")
 
     
-    # TREND ANALYSIS (KEY UPGRADE)
-    
+    #INSIGHT
 
-    st.subheader(" Trend Insight")
+    st.subheader("Trend Insight")
 
     if len(regret) > 200 and last_100_regret < (regret[100] * 0.2):
-        st.write(" Regret growth has slowed → algorithm is learning effectively.")
+        st.write("Mistakes are slowing down over time — learning is stabilizing.")
 
     if len(rewards) > 200 and last_100_reward > reward_growth_rate * 100:
-        st.write(" Reward accumulation is accelerating → strong ad identified.")
+        st.write("Reward accumulation is picking up speed — a strong ad is being favored.")
+
+    #SELECTION
+
+    st.subheader("Selection Behavior")
+
+    last_200 = selections[-200:] if len(selections) > 200 else selections
+    dominant_ad = max(set(last_200), key=last_200.count)
+    dominance_ratio = last_200.count(dominant_ad) / len(last_200)
+
+    if dominance_ratio > 0.8:
+        st.success(f"The algorithm has clearly settled on Ad {dominant_ad} ({int(dominance_ratio*100)}% of recent choices).")
+    elif dominance_ratio > 0.5:
+        st.write(f"Ad {dominant_ad} is preferred, but the algorithm is still testing others occasionally.")
+    else:
+        st.warning("No single ad dominates yet — the algorithm is still exploring heavily.")
