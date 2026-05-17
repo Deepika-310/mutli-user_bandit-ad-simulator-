@@ -24,5 +24,8 @@ def simulate(ads, algo, steps=1000, non_stationary=False):
 
         rewards.append(total_reward)
         regret.append(cumulative_optimal - total_reward)
+        if not hasattr(algo, "selections"):
+            algo.selections = []
+            algo.selections.append(arm)
 
-    return rewards, regret, algo.N, selections 
+    return rewards, regret, algo.N, algo.selections 
