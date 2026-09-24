@@ -1,0 +1,28 @@
+Scenario,Algorithm,Final regret,+/- 95% CI,Less regret than random,Less regret than e-greedy,Best ad found (runs),Median users to converge
+Easy: 3 ads with clear gaps,Uniform random (baseline),999.4,1.8,0%,-791%,0%,never
+Easy: 3 ads with clear gaps,Epsilon-Greedy (e=0.1),112.2,3.4,89%,+0%,100%,113
+Easy: 3 ads with clear gaps,Decaying Epsilon,74.5,28.4,93%,+34%,96%,99
+Easy: 3 ads with clear gaps,UCB1 (c=2),82.3,2.0,92%,+27%,100%,359
+Easy: 3 ads with clear gaps,UCB1 (c=0.25),14.7,1.2,99%,+87%,100%,108
+Easy: 3 ads with clear gaps,Thompson Sampling,16.8,1.1,98%,+85%,100%,130
+Realistic: 4 ads with 2-5% click rates,Uniform random (baseline),150.0,0.2,0%,-228%,0%,never
+Realistic: 4 ads with 2-5% click rates,Epsilon-Greedy (e=0.1),45.8,5.3,69%,+0%,86%,704
+Realistic: 4 ads with 2-5% click rates,Decaying Epsilon,95.6,12.8,36%,-109%,44%,211
+Realistic: 4 ads with 2-5% click rates,UCB1 (c=2),121.8,0.7,19%,-166%,0%,7671
+Realistic: 4 ads with 2-5% click rates,UCB1 (c=0.25),79.5,1.5,47%,-74%,78%,2853
+Realistic: 4 ads with 2-5% click rates,Thompson Sampling,36.7,2.3,76%,+20%,99%,3338
+"Many ads: 10 ads, small gaps",Uniform random (baseline),2250.3,1.8,0%,-612%,0%,never
+"Many ads: 10 ads, small gaps",Epsilon-Greedy (e=0.1),316.0,20.2,86%,+0%,95%,527
+"Many ads: 10 ads, small gaps",Decaying Epsilon,429.1,73.4,81%,-36%,56%,271
+"Many ads: 10 ads, small gaps",UCB1 (c=2),482.1,5.8,79%,-53%,98%,3218
+"Many ads: 10 ads, small gaps",UCB1 (c=0.25),96.7,4.4,96%,+69%,100%,695
+"Many ads: 10 ads, small gaps",Thompson Sampling,114.7,5.0,95%,+64%,100%,1421
+Changing world: rates reverse halfway,Uniform random (baseline),801.1,1.4,0%,-6%,0%,never
+Changing world: rates reverse halfway,Epsilon-Greedy (e=0.1),754.2,10.0,6%,+0%,10%,1766
+Changing world: rates reverse halfway,Decaying Epsilon,794.5,12.0,1%,-5%,4%,1093
+Changing world: rates reverse halfway,UCB1 (c=2),105.6,3.8,87%,+86%,100%,81
+Changing world: rates reverse halfway,UCB1 (c=0.25),144.1,16.5,82%,+81%,98%,293
+Changing world: rates reverse halfway,Thompson Sampling,428.9,21.8,46%,+43%,86%,1065
+Changing world: rates reverse halfway,"Epsilon-Greedy (e=0.1, step 0.1)",156.1,4.7,81%,+79%,100%,95
+Changing world: rates reverse halfway,"UCB1 (c=0.25, step 0.1)",83.7,5.8,90%,+89%,100%,53
+Changing world: rates reverse halfway,Thompson Sampling (discount 0.99),179.5,2.1,78%,+76%,100%,139

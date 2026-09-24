@@ -1,0 +1,10 @@
+line-length = 110
+
+[lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[lint.per-file-ignores]
+"app.py" = ["E501"]  # long markdown strings
+
+[lint.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query"]
